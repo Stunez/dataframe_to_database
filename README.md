@@ -1,5 +1,5 @@
 # dataframe_to_database
-`By` using Python Pandas DataFrame you can upload 
+By using Python Pandas DataFrame you can upload 
 your duplicated and not duplicated data to database.
 Tested only on PostgreSQL 12 version.
 
@@ -7,6 +7,7 @@ Tested only on PostgreSQL 12 version.
 
 ```python
 From DBInteraction import DBInteraction
+From sqlalchemy import create_engine
 
 DB = DBInteraction('Database_name', 'Schema_name', create_engine())
 

@@ -1,3 +1,15 @@
+""" 
+    Python 3.7+ compatibility.
+    libs -> Pandas 1.4.1 version
+            Sqlalchemy 1.4.47 version
+            
+    By using Python Pandas DataFrame you can upload 
+your duplicated and not duplicated data to database.
+Tested only on PostgreSQL 12 version.
+
+    Made by Daulet Beknazarov @Stunez
+"""
+
 import pandas as pd
 
 from sqlalchemy import dialects

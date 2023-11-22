@@ -12,7 +12,6 @@ Tested only on PostgreSQL 12 version.
 
 import pandas as pd
 
-from sqlalchemy import dialects
 from sqlalchemy import create_engine, dialects, text, bindparam
 
 class DBInteractionException(Exception):
@@ -21,6 +20,9 @@ class DBInteractionException(Exception):
 
 
 class DBInteraction(object):
+    """ Class, as the name itself says, for interaction with the DBMS
+     using DML statements (SELECT, INSERT, UPDATE, DELETE, MERGE).
+     """
     
     def __init__(self, database : str, schema : str, engine : str, if_exists='append'):
         """ Database: str, schema: str, 

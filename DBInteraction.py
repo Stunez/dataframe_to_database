@@ -15,7 +15,7 @@ import pandas as pd
 from sqlalchemy import dialects
 from sqlalchemy import create_engine, dialects, text, bindparam
 
-class CustomException(Exception):
+class DBInteractionException(Exception):
     def __init__(self, message):
         super().__init__(message)
 
@@ -27,8 +27,8 @@ class DBInteraction(object):
         engine: sqlalchemy.engine.(Engine or Connection) or sqlite3.Connection,
         if_exists{‘fail’, ‘replace’, ‘append’}, default ‘append’.
         """
-        self.schema = database
-        self.database = schema
+        self.database = database
+        self.schema = schema
         self.engine = engine
         self.if_exists = if_exists
         
@@ -76,10 +76,10 @@ class DBInteraction(object):
                 self.select_constraint.update({table_name: result_df['constraint_name'].iloc[0]})
             elif result_df.shape[0] > 1:
                 msg = 'Count of CONSTRAINTS in the table is more then 1! add value to select_constraint'
-                raise CustomException(msg)
+                raise DBInteractionException(msg)
             else:
                 msg = 'Count of CONSTRAINTS in the table is equal to 0! add value to select_constraint'
-                raise CustomException(msg)
+                raise DBInteractionException(msg)
     
     
     def updater_table(self, table, engine, keys, data_iter):
@@ -159,7 +159,7 @@ class DBInteraction(object):
         if None in upload_dtype.values():
             print(upload_dtype)
             msg = "ERROR: ONE OF THE DATATYPES IS NOT DECLARED. THEN RETURNED NONETYPE"
-            CustomException(msg)
+            DBInteractionException(msg)
             
         return upload_dtype
     

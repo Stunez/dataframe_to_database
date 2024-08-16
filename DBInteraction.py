@@ -42,6 +42,9 @@ class DBInteraction(object):
             'text': dialects.postgresql.TEXT,
             'jsonb': dialects.postgresql.JSONB,
             'timestamp without time zone': dialects.postgresql.TIMESTAMP,
+            'boolean': dialects.postgresql.BOOLEAN,
+            'double precision': dialects.postgresql.FLOAT,
+            'real': dialects.postgresql.FLOAT,
         }
         
         self.select_constraint = {
@@ -101,17 +104,17 @@ class DBInteraction(object):
         записи в БД. С помощью названия таблички можно вытащить 
         уникальный индекс из маппера.  
         """
-        print('Starting method updater_table!')
+        # Starting method updater_table!
         column_names = ', '.join(keys) 
         
         upload_dtype = self.get_table_attr_types(table.name)
         self.get_constraint_of_table(table.name)
         
-        # для обработки значении query запроса 
+        # for processing values of query | для обработки значении query запроса 
         values_str = ', '.join([':' + x for x in keys])
         set_values_str = ', '.join([x + ' = ' + ':' + x for x in keys[1:]])
         
-        # Итерация записей
+        # Records iteration
         for data in data_iter:
             # query sample
             query = text(f"""
@@ -141,7 +144,10 @@ class DBInteraction(object):
         
         
     def get_table_attr_types(self, table_name):
-        """ Получение типов данных у атрибутов в posgresql."""
+        """ 
+            Getting data types of attributes in postgresql.
+            Получение типов данных у атрибутов в posgresql.
+        """
         query = f"""--sql \n
             SELECT 
                 column_name, 
@@ -167,10 +173,13 @@ class DBInteraction(object):
     
     
     def data_upload(self, data_df, table_name, update_table=False):
-        """ Главный процесс который запускает добавление данных в базу
+        """ The main process that starts adding data 
+        to the database or starts updating its data.
+        
+            Главный процесс который запускает добавление данных в базу
         или же запускает ее обновление данных.
         """
-        print('data_upload starting...')
+        # data_upload starting...
         _method_upload = None
         if update_table:
             _method_upload = self.updater_table
@@ -186,7 +195,7 @@ class DBInteraction(object):
             dtype=upload_dtype,
             method=_method_upload,
         )
-        print('data_upload finished...')
+        # data_upload finished...
 
 if __name__ == '__main__':
     DB = DBInteraction('Database_name', 'Schema_name', create_engine())
